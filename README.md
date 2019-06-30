@@ -15,6 +15,9 @@ they are fooled into believing they not protected functions so run.<br>
 # Will it work on Classic wow?
 As of now yes, but that may change at anytime
 
+# Screenshot of it working in Classic Beta 
+![Screenshot](https://i.imgur.com/GiMAzWy.png)
+
 # Can it be detected?
 Yes<br>
 
