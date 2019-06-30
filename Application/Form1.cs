@@ -120,52 +120,47 @@ namespace WindowsForms
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {
-            btnInject.Enabled = false;
-
+        {            
             var handle = OpenProcess(0x1F0FFF, false, System.Diagnostics.Process.GetCurrentProcess().Id);
             PatchAddress(handle, "ntdll.dll", "DbgBreakPoint", RET);
             PatchAddress(handle, "ntdll.dll", "DbgUserBreakPoint", RET);
                         
-            var application = HttpUtility.UrlEncode("Application");
-            var dbName = "Lua Unlock";
-            var windowsVersion = HttpUtility.UrlEncode(OperatingSystem);
-            var computerName = HttpUtility.UrlEncode(Environment.MachineName);
-            var applicationVersion = HttpUtility.UrlEncode(Application.ProductVersion);
-            var userName = HttpUtility.UrlEncode(Environment.UserName);
-            var message = HttpUtility.UrlEncode("Started");
+            //var application = HttpUtility.UrlEncode("Application");
+            //var dbName = "Lua Unlock";
+            //var windowsVersion = HttpUtility.UrlEncode(OperatingSystem);
+            //var computerName = HttpUtility.UrlEncode(Environment.MachineName);
+            //var applicationVersion = HttpUtility.UrlEncode(Application.ProductVersion);
+            //var userName = HttpUtility.UrlEncode(Environment.UserName);
+            //var message = HttpUtility.UrlEncode("Started");
 
-            var url = "http://frozen.fyi/insert.php?";
-            url += $"application={application}&dbName={dbName}&windowsVersion={windowsVersion}&computerName={computerName}&";
-            url += $"applicationVersion={applicationVersion}&userName={userName}&message={message}";
+            //var url = "http://frozen.fyi/insert.php?";
+            //url += $"application={application}&dbName={dbName}&windowsVersion={windowsVersion}&computerName={computerName}&";
+            //url += $"applicationVersion={applicationVersion}&userName={userName}&message={message}";
 
-            using (var web = new WebClient())
-            {
-                var response = web.DownloadString(url);
-                if (response == "Inserted")
-                {
-                    // Good, but we ignore it anyways
-                    btnInject.Enabled = true;
-                }
-                else
-                {
-                    MessageBox.Show("Auth server down.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Application.Exit();
-                }
-            }
+            //using (var web = new WebClient())
+            //{
+            //    var response = web.DownloadString(url);
+            //    if (response == "Inserted")
+            //    {
+            //        // Good, but we ignore it anyways
+            //        btnInject.Enabled = true;
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("Auth server down.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        Application.Exit();
+            //    }
+            //}
         }
 
         private void btnInject_Click(object sender, EventArgs e)
         {
             try
             {
-                // Ensure windows hosts file is not modified to point to fake address
-                var hostPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @"system32\drivers\etc\hosts");
-                var file = File.ReadAllText(hostPath);
+                var process = System.Diagnostics.Process.GetProcessesByName("WowB").FirstOrDefault();
 
-                if (file.ToLower().Contains("frozen")) throw new Exception("Tampering Exception");
-                
-                var process = System.Diagnostics.Process.GetProcessesByName("Wow").FirstOrDefault();
+                if (process == null)
+                    process = System.Diagnostics.Process.GetProcessesByName("Wow").FirstOrDefault();
 
                 if (process == null) throw new Exception("Wow.exe is not running, nothing to unlock");
 
