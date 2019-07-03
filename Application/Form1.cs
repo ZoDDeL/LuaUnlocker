@@ -123,46 +123,31 @@ namespace WindowsForms
         {            
             var handle = OpenProcess(0x1F0FFF, false, System.Diagnostics.Process.GetCurrentProcess().Id);
             PatchAddress(handle, "ntdll.dll", "DbgBreakPoint", RET);
-            PatchAddress(handle, "ntdll.dll", "DbgUserBreakPoint", RET);
-                        
-            //var application = HttpUtility.UrlEncode("Application");
-            //var dbName = "Lua Unlock";
-            //var windowsVersion = HttpUtility.UrlEncode(OperatingSystem);
-            //var computerName = HttpUtility.UrlEncode(Environment.MachineName);
-            //var applicationVersion = HttpUtility.UrlEncode(Application.ProductVersion);
-            //var userName = HttpUtility.UrlEncode(Environment.UserName);
-            //var message = HttpUtility.UrlEncode("Started");
-
-            //var url = "http://frozen.fyi/insert.php?";
-            //url += $"application={application}&dbName={dbName}&windowsVersion={windowsVersion}&computerName={computerName}&";
-            //url += $"applicationVersion={applicationVersion}&userName={userName}&message={message}";
-
-            //using (var web = new WebClient())
-            //{
-            //    var response = web.DownloadString(url);
-            //    if (response == "Inserted")
-            //    {
-            //        // Good, but we ignore it anyways
-            //        btnInject.Enabled = true;
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("Auth server down.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        Application.Exit();
-            //    }
-            //}
+            PatchAddress(handle, "ntdll.dll", "DbgUserBreakPoint", RET);               
         }
 
         private void btnInject_Click(object sender, EventArgs e)
         {
             try
             {
-                var process = System.Diagnostics.Process.GetProcessesByName("WowB").FirstOrDefault();
+                var process = System.Diagnostics.Process.GetProcessesByName("WowB-64").FirstOrDefault();     // Wow 64 Beta 
 
                 if (process == null)
-                    process = System.Diagnostics.Process.GetProcessesByName("Wow").FirstOrDefault();
+                    process = System.Diagnostics.Process.GetProcessesByName("WowT-64").FirstOrDefault();     // Wow 64 PTR
 
-                if (process == null) throw new Exception("Wow.exe is not running, nothing to unlock");
+                if (process == null)
+                    process = System.Diagnostics.Process.GetProcessesByName("Wow-64").FirstOrDefault();     //  Wow 64 Live (private servers)
+
+                if (process == null)
+                    process = System.Diagnostics.Process.GetProcessesByName("WowB").FirstOrDefault();       //  Wow 64 Beta
+
+                if (process == null)
+                    process = System.Diagnostics.Process.GetProcessesByName("WowT").FirstOrDefault();       //  Wow 64 PTR
+
+                if (process == null)
+                    process = System.Diagnostics.Process.GetProcessesByName("Wow").FirstOrDefault();        // Wow 64 Live / Classic 
+
+                if (process == null) throw new Exception("World of warcraft is not running, nothing to unlock");
 
                 ProcessSharp = new ProcessSharp(process, Process.NET.Memory.MemoryType.Remote);
                 PatternScanner = new PatternScanner(ProcessSharp[ProcessSharp.Native.MainModule.ModuleName]);

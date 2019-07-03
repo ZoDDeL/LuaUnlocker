@@ -1,3 +1,4 @@
-﻿<FodyWeavers>
-    <Costura/>    
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FodyWeavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
+  <Costura />
 </FodyWeavers>
