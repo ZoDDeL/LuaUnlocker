@@ -1,5 +1,5 @@
-# LuaUnlocker
-Lua Unlocker Source for Live WoW 7.x to 8.x and Classic for use with addons like NerdPack & DarkRotatations.com<br>
+# Wow Lua Unlocker
+World of Warcraft Lua Unlocker for Live WoW 7.x to 8.x and Classic<br>
 Website: https://winifix.github.io/<br>
 
 # Credits
