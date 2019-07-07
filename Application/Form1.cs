@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Management;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Web;
 using System.Windows.Forms;
-using Newtonsoft.Json;
 using Process.NET;
 using Process.NET.Patterns;
 
@@ -58,30 +50,25 @@ namespace WindowsForms
             };
 
             var hAlloc = (long)VirtualAllocEx(wHandle, 0, (uint)asm.Length, AllocationType.Commit, MemoryProtection.ExecuteReadWrite);
+            WriteProcessMemory(wHandle, hAlloc, asm, asm.Length, out _);
+            _ = WriteProcessMemory(wHandle, hAlloc + 0x07, BitConverter.GetBytes((long)System.Diagnostics.Process.GetProcessById(id).MainModule.BaseAddress + LuaTaintedPtrOffset), 0x08, out _);
 
-            WriteProcessMemory(wHandle, hAlloc, asm, asm.Length, out int BytesWritten);
-            WriteProcessMemory(wHandle, hAlloc + 0x07, BitConverter.GetBytes((long)System.Diagnostics.Process.GetProcessById(id).MainModule.BaseAddress + LuaTaintedPtrOffset), 0x08, out BytesWritten);
-
-            BypasAntiCheat01(true, wHandle);
-
-            var hThread = CreateRemoteThread(wHandle, IntPtr.Zero, 0, (IntPtr)hAlloc, IntPtr.Zero, 0, out uint iThreadId);
-
-            Thread.Sleep(100);
-
-            BypasAntiCheat01(false, wHandle);
+            AllowCreateRemoteThread(true, wHandle);
+            CreateRemoteThread(wHandle, IntPtr.Zero, 0, (IntPtr)hAlloc, IntPtr.Zero, 0, out _);
+            Thread.Sleep(15);
+            AllowCreateRemoteThread(false, wHandle);
         }
 
-        private void BypasAntiCheat01(bool status, IntPtr wHandle)
+        private void AllowCreateRemoteThread(bool status, IntPtr wHandle)
         {
-            byte[] Patch = {0xFF, 0xE0, 0xCC, 0xCC, 0xCC}; //JMP RAX
-            byte[] Patch2 = {0x48, 0xFF, 0xC0, 0xFF, 0xE0}; //INC RAX, JMP RAX
+            byte[] Patch = {0xFF, 0xE0, 0xCC, 0xCC, 0xCC};    //JMP RAX
+            byte[] Patch2 = {0x48, 0xFF, 0xC0, 0xFF, 0xE0};   //INC RAX, JMP RAX
 
             var CreateRemoteThreadPatchOffset = (long) GetProcAddress(GetModuleHandle("kernel32.dll"), "BaseDumpAppcompatCacheWorker") + 0x1E0;
 
             if (status)
                 Patch = Patch2;
-
-            WriteProcessMemory(wHandle, CreateRemoteThreadPatchOffset, Patch, Patch.Length, out int BytesWritten);
+            _ = WriteProcessMemory(wHandle, CreateRemoteThreadPatchOffset, Patch, Patch.Length, out _);
         }
 
         private readonly byte[] RET = { 0xC3 };
@@ -98,25 +85,6 @@ namespace WindowsForms
             WriteProcessMemory(handle, patchAddress, patch, patch.Length, out bytesRead);
 
             ReadProcessMemory(handle, patchAddress, buffer, patch.Length, ref bytesRead);
-        }
-
-        private static string OperatingSystem
-        {
-            get
-            {
-                var result = string.Empty;
-
-                var moc = new ManagementObjectSearcher(@"SELECT * FROM Win32_OperatingSystem ");
-                foreach (var managementBaseObject in moc.Get())
-                {
-                    var o = (ManagementObject)managementBaseObject;
-                    var x64 = Environment.Is64BitOperatingSystem ? "(x64)" : "(x86)";
-                    result = $@"{o["Caption"]} {x64} Version {o["Version"]} SP {o["ServicePackMajorVersion"]}.{o["ServicePackMinorVersion"]}";
-                    break;
-                }
-
-                return result.Replace("Microsoft", "").Trim();
-            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
