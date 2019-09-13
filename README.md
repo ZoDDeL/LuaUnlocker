@@ -13,7 +13,7 @@ so all wow "protected lua" functions end up being called without issues 99% of t
 they are fooled into believing they not protected functions so run.<br>
 
 # Will it work on Classic wow?
-As of now yes, but that may change at anytime
+As of now (2019.09.13) yes, but that may change at anytime
 
 # Screenshot of it working in Classic Beta 
 ![Screenshot](https://i.imgur.com/GiMAzWy.png)
@@ -23,3 +23,7 @@ Yes<br>
 
 # Will it be detected?
 Maybe<br>
+
+# Notes: 
+It may not work on all windows installs, to fix ensure windows memory protection and core isolation are disabled<br>
+
