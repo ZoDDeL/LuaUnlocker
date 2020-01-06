@@ -104,16 +104,19 @@ namespace WindowsForms
                     process = System.Diagnostics.Process.GetProcessesByName("WowT-64").FirstOrDefault();     // Wow 64 PTR
 
                 if (process == null)
-                    process = System.Diagnostics.Process.GetProcessesByName("Wow-64").FirstOrDefault();     //  Wow 64 Live (private servers)
+                    process = System.Diagnostics.Process.GetProcessesByName("Wow-64").FirstOrDefault();      //  Wow 64 Live (private servers)
 
                 if (process == null)
-                    process = System.Diagnostics.Process.GetProcessesByName("WowB").FirstOrDefault();       //  Wow 64 Beta
+                    process = System.Diagnostics.Process.GetProcessesByName("WowB").FirstOrDefault();        //  Wow 64 Beta
 
                 if (process == null)
-                    process = System.Diagnostics.Process.GetProcessesByName("WowT").FirstOrDefault();       //  Wow 64 PTR
+                    process = System.Diagnostics.Process.GetProcessesByName("WowT").FirstOrDefault();        //  Wow 64 PTR
 
                 if (process == null)
-                    process = System.Diagnostics.Process.GetProcessesByName("Wow").FirstOrDefault();        // Wow 64 Live / Classic 
+                    process = System.Diagnostics.Process.GetProcessesByName("Wow").FirstOrDefault();         // Wow 64 Live 
+
+                if (process == null)
+                    process = System.Diagnostics.Process.GetProcessesByName("WowClassic").FirstOrDefault();  // Wow 64 Classic 
 
                 if (process == null) throw new Exception("World of warcraft is not running, nothing to unlock");
 
