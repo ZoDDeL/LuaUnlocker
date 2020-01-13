@@ -1,5 +1,5 @@
 # Note: No longer works as of patch 8.3 on PTR
-For alternative free unlockers see: mmowarez.com
+For alternative free unlockers see: https://mmowarez.com
 
 # Wow Lua Unlocker
 World of Warcraft Lua Unlocker for Live WoW 7.x to 8.x and Classic<br>
