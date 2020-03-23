@@ -105,6 +105,9 @@ namespace WindowsForms
 
                 if (process == null)
                     process = System.Diagnostics.Process.GetProcessesByName("Wow-64").FirstOrDefault();      //  Wow 64 Live (private servers)
+                    
+                if (process == null)
+                    process = System.Diagnostics.Process.GetProcessesByName("freakz735-64").FirstOrDefault();      //  Wow 64 freakz 7.3.5 (private servers)
 
                 if (process == null)
                     process = System.Diagnostics.Process.GetProcessesByName("WowB").FirstOrDefault();        //  Wow 64 Beta
